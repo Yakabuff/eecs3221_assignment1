@@ -9,14 +9,13 @@ int main(){
 	char data[128];
 	char c;
 	size_t bytesRead;
+	size_t bytesWritten;
 	int sizeFile;
 	printf("Name of source file");
 	
 	scanf("%s", infilename); // get input from keyboard (stdin)
 	printf("%s", infilename);
-	printf("Name of destination file");
-	scanf("%s", outfilename); // get input from keyboard (stdin)
-	printf("%s", outfilename);
+
 	
 	int source= open(infilename, O_RDONLY);
 
@@ -27,20 +26,24 @@ int main(){
 
 		close(source);
 		
+		printf("Name of destination file");
+		scanf("%s", outfilename); 
+		printf("%s", outfilename);
+		
 		int destination = open(outfilename, O_RDWR|O_CREAT);
-		printf("%d",write(destination,data,bytesRead));
-		
+		if(destination > 0){
+			bytesWritten = write(destination,data,bytesRead);
+			if(bytesWritten < 0 || bytesWritten != bytesRead){
+				printf("%s", "Write error");
+				exit(1);
+			}
+		}else if (destination == -1){
+			printf("%s", "Read Error");
+			exit(1);
+		}
 
-		
-		
 	}else{
 		printf("%s", "invalid file");
 		exit(1);
 	}
 }
-
-
-
-
-
-
